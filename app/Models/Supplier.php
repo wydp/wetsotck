@@ -9,6 +9,7 @@ class Supplier extends Model
         'SupplierCompany',
         'SupplierName',
         'ContactNumber',
+        'Address',
     ];
 
     public function deliveries()

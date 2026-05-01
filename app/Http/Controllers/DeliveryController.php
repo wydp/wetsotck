@@ -34,6 +34,7 @@ class DeliveryController extends Controller
     {
         $request->validate([
             'SupplierID'    => 'required|exists:suppliers,SupplierID',
+            'SupplierName'  => 'required|string|max:100',  // ← added
             'Driver'        => 'required|string|max:100',
             'PlateNumber'   => 'required|string|max:20',
             'EmployeeID'    => 'required|exists:employees,EmployeeID',
@@ -50,6 +51,7 @@ class DeliveryController extends Controller
             // Step 1: Create the delivery header
             $delivery = Delivery::create([
                 'SupplierID'   => $request->SupplierID,
+                'SupplierName' => $request->SupplierName,  // ← added
                 'Driver'       => $request->Driver,
                 'PlateNumber'  => $request->PlateNumber,
                 'EmployeeID'   => $request->EmployeeID,

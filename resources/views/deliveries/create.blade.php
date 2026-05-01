@@ -24,6 +24,17 @@
             </select>
         </div>
 
+        {{-- After the SupplierID dropdown --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+                Contact Person
+                <span class="text-gray-400 font-normal">(person who handled this delivery)</span>
+            </label>
+            <input type="text" name="SupplierName" required
+                placeholder="e.g. Ramon Dela Cruz"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400">
+        </div>
+
         <div>
             <label class="block text-sm font-medium text-gray-600 mb-1">Driver</label>
             <input type="text" name="Driver" required placeholder="Driver's full name"
@@ -148,6 +159,20 @@ function removeRow(index) {
     document.getElementById('row_' + index)?.remove();
     calcTotal();
 }
+
+// Auto-fill supplier name when dropdown changes
+const supplierNames = @json($suppliers->pluck('SupplierName', 'SupplierID'));
+
+document.querySelector('[name="SupplierID"]').addEventListener('change', function() {
+    const selected = this.value;
+    const nameInput = document.querySelector('[name="SupplierName"]');
+    if (supplierNames[selected]) {
+        nameInput.value = supplierNames[selected];
+        // Pre-fills with the default contact — admin can still edit it
+    } else {
+        nameInput.value = '';
+    }
+});
 
 // Add one row by default
 addRow();

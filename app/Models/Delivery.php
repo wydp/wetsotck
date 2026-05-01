@@ -7,6 +7,7 @@ class Delivery extends Model
     protected $primaryKey = 'DeliveryID';
     protected $fillable = [
         'SupplierID',
+        'SupplierName',
         'Driver',
         'PlateNumber',
         'TotalCost',

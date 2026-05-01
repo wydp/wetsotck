@@ -46,4 +46,67 @@
     </div>
 </div>
 
+{{-- Delivery History Table --}}
+<div class="mt-8 bg-white rounded-xl shadow p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold text-gray-700">Recent Deliveries</h2>
+        <a href="{{ route('deliveries.create') }}"
+           class="bg-red-600 text-white text-sm px-3 py-1 rounded-lg hover:bg-red-700">
+            + Add Delivery
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+            <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                <tr>
+                    <th class="px-4 py-3">Date</th>
+                    <th class="px-4 py-3">Supplier</th>
+                    <th class="px-4 py-3">Contact Person</th>
+                    <th class="px-4 py-3">Driver</th>
+                    <th class="px-4 py-3">Plate</th>
+                    <th class="px-4 py-3">Received By</th>
+                    <th class="px-4 py-3 text-right">Total Cost</th>
+                    <th class="px-4 py-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @forelse($recentDeliveries as $delivery)
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-3">{{ $delivery->DeliveryDate }}</td>
+                    <td class="px-4 py-3">{{ $delivery->supplier->SupplierCompany ?? 'N/A' }}</td>
+                    <td class="px-4 py-3">{{ $delivery->SupplierName ?? '—' }}</td>
+                    <td class="px-4 py-3">{{ $delivery->Driver }}</td>
+                    <td class="px-4 py-3">{{ $delivery->PlateNumber }}</td>
+                    <td class="px-4 py-3">
+                        {{ $delivery->employee->FirstName ?? '' }}
+                        {{ $delivery->employee->LastName ?? 'N/A' }}
+                    </td>
+                    <td class="px-4 py-3 text-right font-medium">
+                        ₱{{ number_format($delivery->TotalCost, 2) }}
+                    </td>
+                    <td class="px-4 py-3">
+                        <a href="{{ route('deliveries.show', $delivery->DeliveryID) }}"
+                           class="text-blue-600 hover:underline text-xs">View</a>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="8" class="px-4 py-8 text-center text-gray-400">
+                        No deliveries recorded yet.
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    @if($recentDeliveries->count() >= 10)
+    <div class="mt-3 text-right">
+        <a href="{{ route('deliveries.index') }}"
+           class="text-red-600 text-sm hover:underline">View all deliveries →</a>
+    </div>
+    @endif
+</div>
+
 @endsection

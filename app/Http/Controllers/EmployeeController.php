@@ -20,15 +20,24 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'FirstName'     => 'required|string|max:50',
-            'LastName'      => 'required|string|max:50',
-            'ContactNumber' => 'nullable|string|max:11',
-            'Role'          => 'required|string|max:50',
+            'FirstName' => 'required|string|max:50',
+            'LastName'  => 'required|string|max:50',
+            'Role'      => 'required|string|max:50',
         ]);
 
-        Employee::create($request->only(['FirstName', 'LastName', 'ContactNumber', 'Role', 'IsActive']));
+        Employee::create([
+            'FirstName'     => $request->FirstName,
+            'MiddleName'    => $request->MiddleName,
+            'LastName'      => $request->LastName,
+            'ContactNumber' => $request->ContactNumber,
+            'Address'       => $request->Address,
+            'Role'          => $request->Role,
+            'IsActive'      => $request->has('IsActive') ? 1 : 0,
+        ]);
+
         return redirect()->route('employees.index')->with('success', 'Employee added!');
     }
+
 
     public function edit(Employee $employee)
     {
@@ -36,10 +45,21 @@ class EmployeeController extends Controller
     }
 
     public function update(Request $request, Employee $employee)
-    {
-        $employee->update($request->only(['FirstName', 'LastName', 'ContactNumber', 'Role', 'IsActive']));
-        return redirect()->route('employees.index')->with('success', 'Employee updated!');
-    }
+{
+    $employee->update([
+        'FirstName'     => $request->FirstName,
+        'MiddleName'    => $request->MiddleName,
+        'LastName'      => $request->LastName,
+        'ContactNumber' => $request->ContactNumber,
+        'Address'       => $request->Address,
+        'Role'          => $request->Role,
+        'IsActive'      => $request->has('IsActive') ? 1 : 0,
+        // $request->has('IsActive') → true if checkbox was checked
+        // If not checked → sends 0 (inactive)
+    ]);
+    return redirect()->route('employees.index')->with('success', 'Employee updated!');
+}
+
 
     public function destroy(Employee $employee)
     {

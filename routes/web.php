@@ -7,9 +7,15 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\DeliveryDetailController;
 
-// Dashboard
 Route::get('/', function () {
-    return view('dashboard');
+    $recentDeliveries = \App\Models\Delivery::with(['supplier', 'employee'])
+        ->orderBy('DeliveryDate', 'desc')
+        ->limit(10)
+        ->get();
+
+    $tanks = \App\Models\Tank::with('fuel')->get();
+
+    return view('dashboard', compact('recentDeliveries', 'tanks'));
 })->name('dashboard');
 
 // Resource Routes — generates all 7 CRUD routes automatically
