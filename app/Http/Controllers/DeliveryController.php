@@ -56,10 +56,10 @@ class DeliveryController extends Controller
                 'PlateNumber'  => $request->PlateNumber,
                 'EmployeeID'   => $request->EmployeeID,
                 'DeliveryDate' => $request->DeliveryDate,
-                'TotalCost'    => 0, // temporary, updated below
+                // TotalCost starts 0, trigger updates it automatically
             ]);
 
-            $totalCost = 0;
+            // $totalCost = 0;
 
             // Step 2: Create each detail row
             foreach ($request->details as $detail) {
@@ -70,20 +70,20 @@ class DeliveryController extends Controller
                     'TankID'     => $detail['TankID'],
                     'Quantity'   => $detail['Quantity'],
                     'UnitCost'   => $detail['UnitCost'],
-                    'Subtotal'   => $subtotal,
+                    // 'Subtotal'   => $subtotal,
                 ]);
 
-                // Step 3: Update tank's CurrentCapacity
-                $tank = Tank::find($detail['TankID']);
-                $tank->CurrentCapacity += $detail['Quantity'];
-                $tank->save();
+                // // Step 3: Update tank's CurrentCapacity
+                // $tank = Tank::find($detail['TankID']);
+                // $tank->CurrentCapacity += $detail['Quantity'];
+                // $tank->save();
 
-                $totalCost += $subtotal;
+                // $totalCost += $subtotal;
             }
 
-            // Step 4: Update delivery's TotalCost
-            $delivery->TotalCost = $totalCost;
-            $delivery->save();
+            // // Step 4: Update delivery's TotalCost
+            // $delivery->TotalCost = $totalCost;
+            // $delivery->save();
         });
 
         return redirect()->route('deliveries.index')
