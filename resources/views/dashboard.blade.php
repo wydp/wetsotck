@@ -37,7 +37,7 @@
                             d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"/>
                     </svg>
                 </div>
-                <p class="text-4xl font-bold text-gray-800">{{ \App\Models\Supplier::whereNull('deleted_at')->count() }}</p>
+                <p class="text-4xl font-bold text-gray-800">{{ \App\Models\Supplier::count() }}</p>
             </div>
         </div>
     </a>

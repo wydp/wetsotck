@@ -25,3 +25,17 @@ Route::resource('suppliers', SupplierController::class);
 Route::resource('employees', EmployeeController::class);
 Route::resource('deliveries', DeliveryController::class);
 Route::resource('delivery-details', DeliveryDetailController::class);
+
+Route::post('suppliers/{supplier}/restore', function(\App\Models\Supplier $supplier) {
+    $supplier->restore();
+    return redirect()->route('suppliers.index')->with('success', 'Supplier restored!');
+})->name('suppliers.restore')->withTrashed();
+
+Route::post('employees/{employee}/toggle', function(\App\Models\Employee $employee) {
+    $employee->IsActive = !$employee->IsActive;
+    $employee->save();
+    
+    $status = $employee->IsActive ? 'activated' : 'deactivated';
+    return redirect()->route('employees.index')
+        ->with('success', "Employee {$status} successfully.");
+})->name('employees.toggle');
