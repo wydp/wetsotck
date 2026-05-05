@@ -23,9 +23,10 @@ class SupplierController extends Controller
             'SupplierName'    => 'required|string|max:100',
             'SupplierCompany' => 'nullable|string|max:100',
             'ContactNumber'   => 'nullable|string|max:11',
+            'address'   => 'nullable|string|max:200',
         ]);
 
-        Supplier::create($request->only(['SupplierCompany', 'SupplierName', 'ContactNumber']));
+        Supplier::create($request->only(['SupplierCompany', 'SupplierName', 'ContactNumber', 'Address']));
         return redirect()->route('suppliers.index')->with('success', 'Supplier added!');
     }
 
@@ -36,7 +37,7 @@ class SupplierController extends Controller
 
     public function update(Request $request, Supplier $supplier)
     {
-        $supplier->update($request->only(['SupplierCompany', 'SupplierName', 'ContactNumber']));
+        $supplier->update($request->only(['SupplierCompany', 'SupplierName', 'ContactNumber', 'Address']));
         return redirect()->route('suppliers.index')->with('success', 'Supplier updated!');
     }
 
