@@ -218,13 +218,7 @@
 </form>
 
 <script>
-// Tank options
-const tanks = @json($tanks->map(fn($t) => [
-    'id'    => $t->TankID,
-    'label' => $t->fuel->FuelName . ' Tank',
-    'fuel'  => $t->fuel->FuelName,
-    'max'   => $t->MaxCapacity,
-]));
+const tanks = @json($tanksForJS);
 
 // Supplier auto-fill contact
 document.getElementById('supplierSelect').addEventListener('change', function() {
@@ -326,7 +320,6 @@ function removeRow(idx) {
     }
 }
 
-// Validate date before submit
 document.getElementById('deliveryForm').addEventListener('submit', function(e) {
     const date = document.getElementById('deliveryDateHidden').value;
     if (!date) {
@@ -341,7 +334,6 @@ document.getElementById('deliveryForm').addEventListener('submit', function(e) {
     }
 });
 
-// Add first row automatically
 addRow();
 </script>
 

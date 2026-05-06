@@ -22,12 +22,28 @@ class DeliveryController extends Controller
 
     // Show the Add Delivery form
     public function create()
-    {
-        $suppliers = Supplier::all();
-        $employees = Employee::where('IsActive', true)->get();
-        $tanks     = Tank::with('fuel')->get();
-        return view('deliveries.create', compact('suppliers', 'employees', 'tanks'));
-    }
+{
+    $suppliers = Supplier::all();
+    $employees = Employee::where('IsActive', true)->get();
+    $tanks     = Tank::with('fuel')->get();
+
+    // Format tanks for JavaScript here in PHP — cleaner and safer
+    $tanksForJS = $tanks->map(function($t) {
+        return [
+            'id'    => $t->TankID,
+            'label' => $t->fuel->FuelName . ' Tank',
+            'fuel'  => $t->fuel->FuelName,
+            'max'   => $t->MaxCapacity,
+        ];
+    })->values();
+
+    return view('deliveries.create', compact(
+        'suppliers',
+        'employees',
+        'tanks',
+        'tanksForJS'   // ← pass the formatted version
+    ));
+}
 
     // Save the new delivery
     public function store(Request $request)

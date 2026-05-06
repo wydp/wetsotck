@@ -67,26 +67,68 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         @foreach(\App\Models\Tank::with('fuel')->get() as $tank)
         @php
-            $pct = $tank->MaxCapacity > 0
-                ? ($tank->CurrentCapacity / $tank->MaxCapacity) * 100
-                : 0;
-            $color = $pct > 60 ? 'bg-green-500' : ($pct > 25 ? 'bg-yellow-500' : 'bg-red-500');
-            $badge = $pct > 60 ? 'text-green-700 bg-green-50' : ($pct > 25 ? 'text-yellow-700 bg-yellow-50' : 'text-red-700 bg-red-50');
+            $pct    = $tank->MaxCapacity > 0
+                        ? ($tank->CurrentCapacity / $tank->MaxCapacity) * 100
+                        : 0;
+            $pctRnd = round($pct, 1);
+
+            if ($pct > 60) {
+                $fillColor   = '#1D9E75';
+                $fillOpacity = '0.25';
+                $badgeClass  = 'bg-green-50 text-green-700';
+                $statusText  = 'Good level';
+            } elseif ($pct > 25) {
+                $fillColor   = '#EF9F27';
+                $fillOpacity = '0.30';
+                $badgeClass  = 'bg-yellow-50 text-yellow-700';
+                $statusText  = 'Half full';
+            } else {
+                $fillColor   = '#E24B4A';
+                $fillOpacity = '0.30';
+                $badgeClass  = 'bg-red-50 text-red-700';
+                $statusText  = 'Low stock';
+            }
         @endphp
-        <div class="border border-gray-100 rounded-xl p-4 hover:border-gray-200 transition-colors">
-            <div class="flex items-center justify-between mb-3">
-                <p class="font-semibold text-gray-800">{{ $tank->fuel->FuelName }}</p>
-                <span class="text-xs font-medium px-2 py-0.5 rounded-full {{ $badge }}">
-                    {{ number_format($pct, 1) }}%
+
+        <div class="border border-gray-100 rounded-xl p-4 hover:border-gray-200 transition-colors
+                    flex flex-col gap-3">
+
+            {{-- Tank name + status badge --}}
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="font-semibold text-gray-800 text-sm">{{ $tank->fuel->FuelName }}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Tank #{{ $tank->TankID }}</p>
+                </div>
+                <span class="text-xs font-medium px-2 py-0.5 rounded-full {{ $badgeClass }}">
+                    {{ $statusText }}
                 </span>
             </div>
-            <div class="bg-gray-100 rounded-full h-2 mb-2">
-                <div class="{{ $color }} h-2 rounded-full transition-all" style="width: {{ min($pct, 100) }}%"></div>
+
+            {{-- Vertical fill graph --}}
+            <div class="relative rounded-xl overflow-hidden bg-gray-100" style="height: 120px;">
+                {{-- Fill rises from bottom --}}
+                <div class="absolute bottom-0 left-0 right-0 transition-all duration-500"
+                     style="height: {{ min($pctRnd, 100) }}%;
+                            background-color: {{ $fillColor }};
+                            opacity: {{ $fillOpacity }};">
+                </div>
+                {{-- Centered percentage --}}
+                <div class="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
+                    <span class="text-2xl font-bold text-gray-800">{{ $pctRnd }}%</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-wider">capacity</span>
+                </div>
             </div>
-            <div class="flex justify-between text-xs text-gray-400">
-                <span>{{ number_format($tank->CurrentCapacity, 2) }} L</span>
-                <span>{{ number_format($tank->MaxCapacity, 2) }} L max</span>
+
+            {{-- Volume details --}}
+            <div class="flex justify-between text-xs">
+                <span class="text-gray-700 font-medium">
+                    {{ number_format($tank->CurrentCapacity, 2) }} L
+                </span>
+                <span class="text-gray-400">
+                    / {{ number_format($tank->MaxCapacity, 2) }} L max
+                </span>
             </div>
+
         </div>
         @endforeach
     </div>
