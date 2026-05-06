@@ -46,11 +46,14 @@ class TankController extends Controller
         return redirect()->route('tanks.index')->with('success', 'Tank updated!');
     }
 
-    public function destroy(Tank $tank)
-    {
-        $tank->delete();
-        return redirect()->route('tanks.index')->with('success', 'Tank deleted!');
-    }
+   public function destroy(Tank $tank)
+{
+    $tank->delete();
+    // SoftDeletes trait → sets deleted_at timestamp
+    // tank disappears from normal queries but stays in DB ✅
+    return redirect()->route('tanks.index')
+        ->with('success', 'Tank archived.');
+}
 
     public function show(Tank $tank)
     {

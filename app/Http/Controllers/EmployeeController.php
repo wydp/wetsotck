@@ -63,9 +63,11 @@ class EmployeeController extends Controller
 
     public function destroy(Employee $employee)
     {
-        $employee->IsActive = false;
-        $employee->save();
-        return redirect()->route('employees.index')->with('success', 'Employee deactivated!');
+        $employee->delete();
+        // Note: this archives — different from deactivating (IsActive)
+        // Archiving = soft delete, Deactivating = IsActive = false
+        return redirect()->route('employees.index')
+            ->with('success', 'Employee archived.');
     }
 
     public function show(Employee $employee)

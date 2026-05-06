@@ -84,6 +84,19 @@
                     Tanks
                 </a>
 
+                {{-- Divider --}}
+                <div class="border-t border-gray-700 my-2"></div>
+
+                <a href="{{ route('archive.index') }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all
+                        {{ request()->routeIs('archive.*') ? 'bg-red-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                    </svg>
+                    Archive
+                </a>
+
             </nav>
 
             {{-- Profile / Sign Out --}}

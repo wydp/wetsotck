@@ -133,11 +133,10 @@ class DeliveryController extends Controller
             ->with('success', 'Delivery updated successfully!');
     }
 
-    // Delete a delivery
     public function destroy(Delivery $delivery)
     {
-        $delivery->delete(); // cascade deletes details automatically
+        $delivery->delete();
         return redirect()->route('deliveries.index')
-            ->with('success', 'Delivery deleted successfully!');
+            ->with('success', 'Delivery archived.');
     }
 }

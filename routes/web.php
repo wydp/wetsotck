@@ -6,6 +6,8 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\DeliveryDetailController;
+use App\Http\Controllers\ArchiveController;
+
 
 Route::get('/', function () {
     $recentDeliveries = \App\Models\Delivery::with(['supplier', 'employee'])
@@ -39,3 +41,13 @@ Route::post('employees/{employee}/toggle', function(\App\Models\Employee $employ
     return redirect()->route('employees.index')
         ->with('success', "Employee {$status} successfully.");
 })->name('employees.toggle');
+
+// Archive routes
+Route::get('/archive', [ArchiveController::class, 'index'])
+    ->name('archive.index');
+
+Route::post('/archive/{type}/{id}/restore', [ArchiveController::class, 'restore'])
+    ->name('archive.restore');
+
+Route::delete('/archive/{type}/{id}/force-delete', [ArchiveController::class, 'forceDelete'])
+    ->name('archive.forceDelete');

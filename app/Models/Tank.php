@@ -1,9 +1,14 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes; // ← add
+
 
 class Tank extends Model
 {
+    use SoftDeletes; // ← add
+
+
     protected $primaryKey = 'TankID';
     protected $fillable = [
         'FuelID',
